@@ -6,28 +6,40 @@ const app = express();
 MongoClient.connect('mongodb+srv://admin:admin@cluster0.lfnwc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {
     useUnifiedTopology: true
 })
-.then(client => {
-    const db = client.db('crud-app');
+    .then(client => {
+        console.log('connect to db')
+        const db = client.db('crud-app');
+        const collections = db.collection('collections')
 
-    app.use()
-    app.get()
-    app.listen()
-    app.post()
-})
-.catch(err => {
-    console.error(err)
-})
-app.use(bodyParser.urlencoded({ extended: true }))
+        app.use(bodyParser.urlencoded({ extended: true }))
 
-app.listen(3000, () => {
-    console.log("port 3000 is working")
-})
+        app.listen(3000, () => {
+            console.log("port 3000 is working")
+        })
 
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + "/index.html")
-})
+        app.get('/', (req, res) => {
+            res.sendFile(__dirname + "/index.html")
+            const cursor = db.collection('collections').find().toArray()
+            .then(res => {
+                console.log(res)
+            })
+            .catch(error => {
+                console.error(error)
+            })
 
-app.post('/quotes', (req, res) => {
-    console.log(req)
-    console.log(req.body)
-})
+        })
+
+        app.post('/collections', (req, res) => {
+            collections.insertOne(req.body)
+                .then(res => {
+                    res.redirect('/')
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        })
+
+    })
+    .catch(err => {
+        console.error(err)
+    })
