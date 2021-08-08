@@ -17,3 +17,17 @@ MongoClient.connect('mongodb+srv://admin:admin@cluster0.lfnwc.mongodb.net/myFirs
 .catch(err => {
     console.error(err)
 })
+app.use(bodyParser.urlencoded({ extended: true }))
+
+app.listen(3000, () => {
+    console.log("port 3000 is working")
+})
+
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + "/index.html")
+})
+
+app.post('/quotes', (req, res) => {
+    console.log(req)
+    console.log(req.body)
+})
